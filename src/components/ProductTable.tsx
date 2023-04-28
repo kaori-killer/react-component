@@ -2,7 +2,7 @@ import ProductsInCategory from "./ProductsInCategory";
 
 import Product from '../types/Product';
 
-import selectCategories from "../types/selectCategories";
+import selectCategories from "../utils/selectCategories";
 
 type ProductTableProps = {
     products: Product[];
