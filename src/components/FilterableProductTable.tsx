@@ -1,37 +1,63 @@
-import { useState } from 'react';
+import {useRef, useState, useEffect} from 'react';
 
-import ProductTable from "./ProductTable";
-import SearchBar from "./SearchBar";
+import ProductTable from './ProductTable';
+import SearchBar from './SearchBar';
 
-import Product from "../types/Product";
+import type Product from '../types/Product';
 
-import filterProducts from "../utils/filterProducts";
+import filterProducts from '../utils/filterProducts';
 
-interface FilterableProductTableProps {
-    products: Product[]
+type FilterableProductTableProps = {
+	products: Product[];
+};
+
+function useProductsFilter(products: Product[]) {
+	const [filterText, setFilterText] = useState<string>('');
+	const [inStockOnly, setInStockOnly] = useState<boolean>(false);
+
+	const filteredProducts = filterProducts(products, {
+		filterText, inStockOnly,
+	});
+
+	return {
+		filterText, setFilterText,
+		inStockOnly, setInStockOnly,
+		filteredProducts,
+	};
 }
 
-export default function FilterableProductTable({ 
-    products,
- }: FilterableProductTableProps) {
-    const [filterText, setFilterText] = useState<string>('');
-    const [inStockOnly, setInStockOnly]  = useState<boolean>(false);
+export default function FilterableProductTable({
+	products,
+}: FilterableProductTableProps) {
+	const {
+		filterText, setFilterText,
+		inStockOnly, setInStockOnly,
+		filteredProducts,
+	} = useProductsFilter(products);
 
-    const filteredProducts = filterProducts(products, {
-        filterText, inStockOnly 
-    });
+	const query = useRef('');
 
-    return(
-        <div>
-            <SearchBar 
-                filterText={filterText}
-                setFilterText={setFilterText}
-                inStockOnly={inStockOnly}
-                setInStockOnly={setInStockOnly}
-            />
-            <ProductTable
-                products={filteredProducts} 
-            />
-        </div>
-    )
+	useEffect(() => {
+		query.current = filterText;
+	}, [filterText]);
+
+	useEffect(() => {
+		setTimeout(() => {
+			console.log(query.current);
+		}, 3_000);
+	});
+
+	return (
+		<div>
+			<SearchBar
+				filterText={filterText}
+				setFilterText={setFilterText}
+				inStockOnly={inStockOnly}
+				setInStockOnly={setInStockOnly}
+			/>
+			<ProductTable
+				products={filteredProducts}
+			/>
+		</div>
+	);
 }

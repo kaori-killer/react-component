@@ -1,18 +1,18 @@
-import ProductsInCategory from "./ProductsInCategory";
+import ProductsInCategory from './ProductsInCategory';
 
-import Product from '../types/Product';
+import type Product from '../types/Product';
 
-import selectCategories from "../utils/selectCategories";
+import selectCategories from '../utils/selectCategories';
 
 type ProductTableProps = {
-    products: Product[];
-}
+	products: Product[];
+};
 
-export default function ProductTable({ products }: ProductTableProps){
+export default function ProductTable({products}: ProductTableProps) {
 	const categories = selectCategories(products);
 
-	return(
-		<table className="product-table">
+	return (
+		<table className='product-table'>
 			<thead>
 				<tr>
 					<th>name</th>
@@ -20,11 +20,11 @@ export default function ProductTable({ products }: ProductTableProps){
 				</tr>
 			</thead>
 			<tbody>
-				{categories.map((category) => (
-					<ProductsInCategory 
+				{categories.map(category => (
+					<ProductsInCategory
 						key={category}
-						category={category} 
-						products={products} 
+						category={category}
+						products={products}
 					/>
 				))}
 			</tbody>
